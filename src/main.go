@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log"
 
-	g "github.com/erasernoob/agent/src/global"
+	g "github.com/erasernoob/JARVIS/src/global"
 )
 
 func main() {
@@ -13,7 +13,7 @@ func main() {
 	if err := g.Init(ctx); err != nil {
 		log.Fatalf("init failed: %s", err)
 	}
-	agent := g.GetAgent()
+	agent := g.Agent
 	content, _ := agent.SendUserMessage(ctx, "Tell me a joke, and it's about the programming")
 	fmt.Println(content)
 }

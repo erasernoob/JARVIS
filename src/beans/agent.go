@@ -1,4 +1,4 @@
-package global
+package beans
 
 import (
 	"context"

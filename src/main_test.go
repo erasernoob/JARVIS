@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	"github.com/cloudwego/eino/schema"
-	g "github.com/erasernoob/agent/src/global"
+	g "github.com/erasernoob/JARVIS/src/global"
 	"github.com/joho/godotenv"
 )
 
