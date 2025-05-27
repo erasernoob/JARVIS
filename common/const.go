@@ -9,3 +9,8 @@ type contextKey string
 const (
 	UID contextKey = "user_id"
 )
+
+const (
+	ASSISTANT = "assistant"
+	USER      = "user"
+)

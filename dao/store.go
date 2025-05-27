@@ -7,12 +7,13 @@ import (
 	"github.com/cloudwego/eino/schema"
 	g "github.com/erasernoob/JARVIS/global"
 	"github.com/erasernoob/JARVIS/model"
+	"github.com/google/uuid"
 )
 
 func GetMessagesByConversationID(ctx context.Context, cid string) ([]*schema.Message, error) {
 	var res []*schema.Message
 
-	sql := `SELECT * FROM messages WHERE conversation_id = $1 ORDER BY created_at DESC`
+	sql := `SELECT * FROM messages WHERE conversation_id = $1 ORDER BY timestamp DESC`
 	rows, err := g.PgConn.Query(ctx, sql, cid)
 	if err != nil {
 		return nil, err
@@ -62,20 +63,50 @@ func GetConversationByUid(ctx context.Context, uid string) ([]*model.Conversatio
 	return res, nil
 }
 
-func AddMessage(ctx context.Context, cid string, role string, content string) error {
+func BatchAddMessage(ctx context.Context, cid string, role string, messages ...string) error {
+	// for _, msg := range messages {
+
+	// }
 	sql := `INSERT INTO messages (conversation_id, role, content, timestamp) VALUES ($1, $2, $3, NOW())`
 	t, err := g.PgConn.Begin(ctx)
 	if err != nil {
 		return fmt.Errorf("begin transaction failed: %w", err)
 	}
 
-	tag, err := t.Exec(ctx, sql, cid, role, content)
+	tag, err := t.Exec(ctx, sql, cid, role, "")
 	if err != nil || tag.RowsAffected() == 0 {
 		// 回滚事务
 		if rbErr := t.Rollback(ctx); rbErr != nil {
 			return fmt.Errorf("rollback failed: %w, original error: %v", rbErr, err)
 		}
 		return fmt.Errorf("exec addUser Message failed: %w", err)
+	}
+	// 提交事务
+	if err := t.Commit(ctx); err != nil {
+		return fmt.Errorf("commit failed: %v", err)
+	}
+	return nil
+}
+
+func AddMessage(ctx context.Context, cid string, role string, content string) error {
+	sql := `INSERT INTO messages (id, conversation_id, role, content, timestamp) VALUES ($1, $2, $3, $4, NOW())`
+	t, err := g.PgConn.Begin(ctx)
+	if err != nil {
+		return fmt.Errorf("begin transaction failed: %w", err)
+	}
+
+	mid, _ := uuid.NewRandom()
+	tag, err := t.Exec(ctx, sql, mid, cid, role, content)
+	if err != nil || tag.RowsAffected() == 0 {
+		// 回滚事务
+		if rbErr := t.Rollback(ctx); rbErr != nil {
+			return fmt.Errorf("rollback failed: %w, original error: %v", rbErr, err)
+		}
+		return fmt.Errorf("exec addUser Message failed: %w", err)
+	}
+	// 提交事务
+	if err := t.Commit(ctx); err != nil {
+		return fmt.Errorf("commit failed: %v", err)
 	}
 	return nil
 }
@@ -86,10 +117,6 @@ func AddConversation(ctx context.Context, c *model.Conversation) (string, error)
 	err := g.PgConn.QueryRow(ctx, sql, c.ID, c.UserID, c.Title).Scan(&id)
 	if err != nil {
 		return "", fmt.Errorf("insert conversation failed: %w", err)
-	}
-
-	if err != nil {
-		return "", fmt.Errorf("parse conversation ID failed: %w", err)
 	}
 	return id, nil
 }

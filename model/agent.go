@@ -17,18 +17,16 @@ type Client struct {
 }
 
 // test
-func (c *Client) SendUserMessage(ctx context.Context, messages ...string) (string, error) {
+func (c *Client) SendUserMessage(ctx context.Context, messages ...string) (*schema.Message, error) {
 	for _, msg := range messages {
 		c.History = append(c.History, schema.UserMessage(msg))
 	}
-
 	response, err := c.LLM.Generate(ctx, c.History)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
-	// Add Message
 
-	return response.Content, nil
+	return response, nil
 }
 
 func (c *Client) SendSystemMessage(ctx context.Context, messages ...string) (string, error) {

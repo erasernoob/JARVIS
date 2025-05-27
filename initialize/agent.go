@@ -64,14 +64,16 @@ func getBasePrompt(c context.Context) error {
 
 func initializeAgent(ctx context.Context) error {
 	// Get the memory restore the history from database
+
 	agent, err := service.RestoreClientFromDB(ctx)
 	if err != nil {
 		log.Fatalf("Restore client from DB failed: err=%v", err)
 		return err
 	}
 	agent.LLM = LLM
-	agent.History = History
 	Agent = agent
+	// 叠加
+	Agent.History = append(History, agent.History...)
 	return nil
 }
 
