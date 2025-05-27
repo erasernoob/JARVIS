@@ -11,8 +11,8 @@ import (
 // Conversation 对应 conversations 表
 type Conversation struct {
 	ID        uuid.UUID       `json:"id"`
-	UserID    sql.NullString  `json:"user_id"` // sql.NullString 处理可空的 TEXT 类型
-	Title     sql.NullString  `json:"title"`
+	UserID    string          `json:"user_id"` // sql.NullString 处理可空的 TEXT 类型
+	Title     string          `json:"title"`
 	CreatedAt time.Time       `json:"created_at"`
 	UpdatedAt time.Time       `json:"updated_at"`
 	Metadata  json.RawMessage `json:"metadata"` // json.RawMessage 处理 JSONB 类型
