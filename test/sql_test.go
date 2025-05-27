@@ -3,19 +3,34 @@ package test
 import (
 	"context"
 	"fmt"
+	"log"
+	"runtime/debug"
 	"testing"
 
+	"github.com/erasernoob/JARVIS/auth"
 	g "github.com/erasernoob/JARVIS/global"
+	"github.com/erasernoob/JARVIS/initialize"
 	"github.com/jackc/pgx/v5"
-	"github.com/joho/godotenv"
 )
 
-var ctx context.Context
-
 func InitTestEnv() {
-	_ = godotenv.Load()
-	ctx = context.Background()
-	_ = g.Init(ctx) // 你原来的 g.Init(ctx)
+	defer func() {
+		if r := recover(); r != nil {
+			log.Fatalf("panic occurred: %v", r)
+			debug.PrintStack()
+		}
+	}()
+	ctx := context.Background()
+	// mock the userID
+	ctx = auth.Identify(ctx)
+
+	if err := g.Init(ctx); err != nil {
+		log.Fatalf("init failed: %s", err)
+	}
+	if err := initialize.Init(ctx); err != nil {
+		log.Fatalf("initialize failed: %s", err)
+	}
+
 }
 
 func Test_SQL(t *testing.T) {

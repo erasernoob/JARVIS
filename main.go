@@ -9,6 +9,7 @@ import (
 	"github.com/erasernoob/JARVIS/auth"
 	g "github.com/erasernoob/JARVIS/global"
 	"github.com/erasernoob/JARVIS/initialize"
+	"github.com/erasernoob/JARVIS/service"
 )
 
 func main() {
@@ -30,6 +31,8 @@ func main() {
 	}
 
 	agent := g.Agent
-	content, _ := agent.SendUserMessage(ctx, "Tell me a joke, and it's about the programming")
+	content, _ := service.SendUserMessage(ctx, agent, "my name is earsernoob")
+	fmt.Println(content)
+	content, _ = service.SendUserMessage(ctx, agent, "what's my name? and tell me my chat history use markdown")
 	fmt.Println(content)
 }

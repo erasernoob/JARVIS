@@ -28,6 +28,7 @@ require (
 	github.com/bytedance/sonic/loader v0.2.4 // indirect
 	github.com/cloudwego/base64x v0.1.5 // indirect
 	github.com/cloudwego/eino-ext/components/model/openai v0.0.0-20250526061219-600837d0bdf3
+	github.com/cloudwego/eino-ext/components/tool/duckduckgo v0.0.0-20250527025003-c8588b6dc7a9
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/go-openapi/jsonpointer v0.21.1 // indirect
 	github.com/go-openapi/swag v0.23.1 // indirect
