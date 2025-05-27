@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/erasernoob/JARVIS/src/config"
+	"github.com/erasernoob/JARVIS/src/beans"
 	"github.com/jackc/pgx/v5"
 )
 
-func InitPostgresDB(ctx context.Context, config *config.PgDbConfig) (*pgx.Conn, error) {
+func InitPostgresDB(ctx context.Context, config *beans.PgDbConfig) (*pgx.Conn, error) {
 	// urlExample := "postgres://username:password@localhost:5432/database_name"
 	connString := fmt.Sprintf("postgres://%s:%s@%s:%s/%s",
 		config.Username, config.Password, config.Host, config.Port, config.Database)

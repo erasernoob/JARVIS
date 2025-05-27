@@ -1,4 +1,4 @@
-package config
+package beans
 
 type Config struct {
 	PostgresDbConfig *PgDbConfig `json:"postgres"`

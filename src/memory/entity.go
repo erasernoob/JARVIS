@@ -18,13 +18,13 @@ type Conversation struct {
 	Metadata  json.RawMessage `json:"metadata"` // json.RawMessage 处理 JSONB 类型
 }
 
-// Message 对应 messages 表
+// 对应messages表
 type Message struct {
-	ID             uuid.UUID       `json:"id"`
-	ConversationID uuid.UUID       `json:"conversation_id"`
-	Role           string          `json:"role"`
-	Content        string          `json:"content"`
-	Timestamp      time.Time       `json:"timestamp"`
-	SequenceNum    int             `json:"sequence_num"`
-	Metadata       json.RawMessage `json:"metadata"`
+	ID             uuid.UUID `json:"id"`
+	ConversationID uuid.UUID `json:"conversation_id"`
+	Role           string    `json:"role"`
+	Content        string    `json:"content"`
+	Timestamp      time.Time `json:"timestamp"`
+	// SequenceNum    int             `json:"sequence_num"`
+	Metadata json.RawMessage `json:"metadata"`
 }
