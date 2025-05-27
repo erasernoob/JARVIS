@@ -5,11 +5,15 @@ import (
 	"fmt"
 	"log"
 
-	g "github.com/erasernoob/JARVIS/src/global"
+	"github.com/erasernoob/JARVIS/auth"
+	g "github.com/erasernoob/JARVIS/global"
 )
 
 func main() {
 	ctx := context.Background()
+	// mock the userID
+	ctx = auth.Identify(ctx)
+
 	if err := g.Init(ctx); err != nil {
 		log.Fatalf("init failed: %s", err)
 	}

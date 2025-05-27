@@ -12,7 +12,7 @@ var (
 )
 
 func getBasePrompt() *schema.Message {
-	bytes, err := os.ReadFile("./src/prompt/base.md")
+	bytes, err := os.ReadFile("./prompt/base.md")
 	if err != nil {
 		log.Fatalf("read the base prompt failed: %s", err)
 	}

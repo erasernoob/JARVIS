@@ -1,7 +1,6 @@
 package memory
 
 import (
-	"database/sql"
 	"encoding/json"
 	"time"
 

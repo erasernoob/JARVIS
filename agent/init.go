@@ -8,8 +8,8 @@ import (
 	"github.com/cloudwego/eino-ext/components/model/openai"
 	"github.com/cloudwego/eino/components/model"
 	"github.com/cloudwego/eino/schema"
-	"github.com/erasernoob/JARVIS/src/beans"
-	"github.com/erasernoob/JARVIS/src/prompt"
+	"github.com/erasernoob/JARVIS/beans"
+	"github.com/erasernoob/JARVIS/prompt"
 )
 
 const (
@@ -37,6 +37,7 @@ func InitAgent(ctx context.Context) (*beans.Client, error) {
 		log.Fatalf("Get base prompt failed: err=%v", err)
 		return nil, err
 	}
+
 	chatModel, err := createChatModel(ctx)
 	if err != nil {
 		log.Fatalf("Create chat model failed: err=%v", err)
@@ -58,6 +59,9 @@ func getBasePrompt(c context.Context) error {
 }
 
 func initializeAgent(ctx context.Context) error {
+	// Get the memory restore the history from database
+	// RestoreUserHistory(ctx)
+
 	Agent = &beans.Client{
 		LLM:     LLM,
 		History: History,

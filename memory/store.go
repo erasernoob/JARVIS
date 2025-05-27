@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/cloudwego/eino/schema"
-	g "github.com/erasernoob/JARVIS/src/global"
+	g "github.com/erasernoob/JARVIS/global"
 	"github.com/google/uuid"
 )
 
@@ -89,6 +89,9 @@ func AddConversation(ctx context.Context, uid string, title string) (*Conversati
 	}
 	// 将字符串转换为 UUID
 	cid, err := uuid.Parse(id)
+	if err != nil {
+		return nil, fmt.Errorf("parse conversation ID failed: %w", err)
+	}
 
 	return &Conversation{
 		ID:     cid,

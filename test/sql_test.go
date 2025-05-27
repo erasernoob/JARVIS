@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"testing"
 
-	g "github.com/erasernoob/JARVIS/src/global"
+	g "github.com/erasernoob/JARVIS/global"
 	"github.com/jackc/pgx/v5"
 	"github.com/joho/godotenv"
 )

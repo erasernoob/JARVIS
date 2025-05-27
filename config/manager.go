@@ -9,7 +9,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/erasernoob/JARVIS/src/beans"
+	"github.com/erasernoob/JARVIS/beans"
 )
 
 // 配置文件filepath
@@ -22,7 +22,7 @@ var (
 // 切换工作目录到项目的根路径
 func CheckTheWd() {
 	cur, _ := os.Getwd()
-	for strings.Contains(cur, "src") {
+	for strings.Contains(cur, "test") {
 		_ = os.Chdir("..")
 		cur, _ = os.Getwd()
 	}

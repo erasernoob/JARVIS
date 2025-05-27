@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/erasernoob/JARVIS/src/beans"
+	"github.com/erasernoob/JARVIS/beans"
 	"github.com/jackc/pgx/v5"
 )
 

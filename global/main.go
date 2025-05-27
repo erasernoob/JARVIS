@@ -5,9 +5,9 @@ import (
 
 	"github.com/cloudwego/eino/components/model"
 	"github.com/cloudwego/eino/schema"
-	"github.com/erasernoob/JARVIS/src/agent"
-	"github.com/erasernoob/JARVIS/src/beans"
-	"github.com/erasernoob/JARVIS/src/config"
+	"github.com/erasernoob/JARVIS/agent"
+	"github.com/erasernoob/JARVIS/beans"
+	"github.com/erasernoob/JARVIS/config"
 	"github.com/jackc/pgx/v5"
 	"github.com/joho/godotenv"
 	_ "github.com/joho/godotenv/autoload"
