@@ -3,11 +3,11 @@ package auth
 import (
 	"context"
 
-	"github.com/erasernoob/JARVIS/cons"
+	cons "github.com/erasernoob/JARVIS/common"
 )
 
 func GetCurUserID() string {
-	return "123"
+	return "1234"
 }
 
 func Identify(ctx context.Context) context.Context {

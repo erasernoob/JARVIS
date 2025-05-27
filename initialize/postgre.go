@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/erasernoob/JARVIS/global"
 	"github.com/erasernoob/JARVIS/model"
 	"github.com/jackc/pgx/v5"
 )
@@ -22,5 +23,10 @@ func InitPostgresDB(ctx context.Context, config *model.PgDbConfig) (*pgx.Conn, e
 		return nil, err
 	}
 
+	global.PgConn = conn
+	if global.PgConn == nil {
+		log.Fatalf("Failed to initialize PostgreSQL connection")
+		return nil, fmt.Errorf("failed to initialize PostgreSQL connection")
+	}
 	return conn, nil
 }

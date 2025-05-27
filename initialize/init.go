@@ -16,7 +16,7 @@ func Init(ctx context.Context) error {
 	}
 
 	// Initialize PostgreSQL database connection
-	global.PgConn, err = InitPostgresDB(ctx, pgConfig)
+	_, err = InitPostgresDB(ctx, pgConfig)
 	if err != nil {
 		// log.Fatalf("Failed to initialize PostgreSQL database: %v", err)
 		return err

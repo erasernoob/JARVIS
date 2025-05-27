@@ -9,10 +9,10 @@ import (
 )
 
 type Client struct {
-	LLM     llm.ToolCallingChatModel
-	History []*schema.Message
-	// 对话Id
-	CID string
+	UID           string
+	LLM           llm.ToolCallingChatModel
+	History       []*schema.Message
+	Conversations []*Conversation
 }
 
 // test
@@ -43,21 +43,3 @@ func (c *Client) SendSystemMessage(ctx context.Context, messages ...string) (str
 
 	return response.Content, nil
 }
-
-// func RestoreClientFromDB(ctx context.Context) (*Client, error) {
-// 	var agent Client
-// 	// 查看是否有对话历史
-// 	uid := ctx.Value(common.UID).(string)
-
-// 	conversations, err := db.GetConversationByUid(ctx, uid)
-// 	if err != nil {
-// 		return nil, fmt.Errorf("failed to get conversations: %w", err)
-// 	}
-// 	if len(conversations) != 0 {
-
-// 	}
-
-// 	// 如果有对话历史，保存后返回
-
-// 	// 如果没有对话历史，创建一个新的对话
-// }

@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"runtime/debug"
 
 	"github.com/erasernoob/JARVIS/auth"
 	g "github.com/erasernoob/JARVIS/global"
@@ -11,6 +12,12 @@ import (
 )
 
 func main() {
+	defer func() {
+		if r := recover(); r != nil {
+			log.Fatalf("panic occurred: %v", r)
+			debug.PrintStack()
+		}
+	}()
 	ctx := context.Background()
 	// mock the userID
 	ctx = auth.Identify(ctx)

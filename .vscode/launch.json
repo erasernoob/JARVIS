@@ -9,7 +9,7 @@
             "type": "go",
             "request": "launch",
             "mode": "debug",
-            "program": "./src/main.go",
+            "program": "./main.go",
             // 设置工作目录
             "cwd": "${cwd}"
         },

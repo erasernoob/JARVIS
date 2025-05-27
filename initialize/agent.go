@@ -10,6 +10,7 @@ import (
 	"github.com/cloudwego/eino/schema"
 
 	m "github.com/erasernoob/JARVIS/model"
+	"github.com/erasernoob/JARVIS/service"
 
 	"github.com/erasernoob/JARVIS/prompt"
 )
@@ -46,6 +47,7 @@ func InitAgent(ctx context.Context) (*m.Client, error) {
 		return nil, err
 	}
 	LLM = chatModel
+
 	if err := initializeAgent(ctx); err != nil {
 		log.Fatalf("Initialize agent failed: err=%v", err)
 		return nil, err
@@ -62,14 +64,15 @@ func getBasePrompt(c context.Context) error {
 
 func initializeAgent(ctx context.Context) error {
 	// Get the memory restore the history from database
-	// RestoreUserHistory(ctx)
-
-	Agent = &m.Client{
-		LLM:     LLM,
-		History: History,
+	agent, err := service.RestoreClientFromDB(ctx)
+	if err != nil {
+		log.Fatalf("Restore client from DB failed: err=%v", err)
+		return err
 	}
+	agent.LLM = LLM
+	agent.History = History
+	Agent = agent
 	return nil
-
 }
 
 func createChatModel(ctx context.Context) (model.ToolCallingChatModel, error) {
