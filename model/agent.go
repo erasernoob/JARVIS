@@ -13,6 +13,7 @@ type Client struct {
 	LLM           llm.ToolCallingChatModel
 	History       []*schema.Message
 	Conversations []*Conversation
+	CurCID        string // 现在正在进行着的conversation
 }
 
 // test

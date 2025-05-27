@@ -26,6 +26,7 @@ func RestoreClientFromDB(ctx context.Context) (*m.Client, error) {
 		// 直接返回所有conversations
 		agent.Conversations = conversations
 		agent.UID = uid
+		agent.CurCID = conversations[len(conversations)-1].ID.String()
 		return &agent, nil
 	}
 	// 如果没有对话历史，创建一个新的对话
@@ -49,6 +50,7 @@ func RestoreClientFromDB(ctx context.Context) (*m.Client, error) {
 	}
 	agent.Conversations = append(agent.Conversations, newConversation)
 	agent.UID = uid
-
+	// 设置活跃的conversation
+	agent.CurCID = newConversation.ID.String()
 	return &agent, nil
 }
