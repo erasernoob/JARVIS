@@ -1,4 +1,4 @@
-package agent
+package initialize
 
 import (
 	"context"
@@ -8,7 +8,8 @@ import (
 	"github.com/cloudwego/eino-ext/components/model/openai"
 	"github.com/cloudwego/eino/components/model"
 	"github.com/cloudwego/eino/schema"
-	"github.com/erasernoob/JARVIS/beans"
+
+	m "github.com/erasernoob/JARVIS/model"
 	"github.com/erasernoob/JARVIS/prompt"
 )
 
@@ -21,14 +22,14 @@ const (
 var (
 	LLM     model.ToolCallingChatModel
 	History []*schema.Message
-	Agent   *beans.Client
+	Agent   *m.Client
 )
 
 func init() {
 
 }
 
-func InitAgent(ctx context.Context) (*beans.Client, error) {
+func InitAgent(ctx context.Context) (*m.Client, error) {
 	if Agent != nil {
 		return Agent, nil
 	}
@@ -62,7 +63,7 @@ func initializeAgent(ctx context.Context) error {
 	// Get the memory restore the history from database
 	// RestoreUserHistory(ctx)
 
-	Agent = &beans.Client{
+	Agent = &m.Client{
 		LLM:     LLM,
 		History: History,
 	}
@@ -85,3 +86,21 @@ func createChatModel(ctx context.Context) (model.ToolCallingChatModel, error) {
 	}
 	return chatModel, nil
 }
+
+// func RestoreClientFromDB(ctx context.Context) (*m.Client, error) {
+// 	var agent m.Client
+// 	// 查看是否有对话历史
+// 	uid := ctx.Value(common.UID).(string)
+
+// 	conversations, err := db.GetConversationByUid(ctx, uid)
+// 	if err != nil {
+// 		return nil, fmt.Errorf("failed to get conversations: %w", err)
+// 	}
+// 	if len(conversations) != 0 {
+
+// 	}
+
+// 	// 如果有对话历史，保存后返回
+
+// 	// 如果没有对话历史，创建一个新的对话
+// }

@@ -1,4 +1,4 @@
-package memory
+package dom
 
 import (
 	"context"
@@ -6,6 +6,7 @@ import (
 
 	"github.com/cloudwego/eino/schema"
 	g "github.com/erasernoob/JARVIS/global"
+	"github.com/erasernoob/JARVIS/model"
 	"github.com/google/uuid"
 )
 
@@ -19,7 +20,7 @@ func GetMessagesByConversationID(ctx context.Context, cid string) ([]*schema.Mes
 	}
 	for rows.Next() {
 		// 声明值类型，分配内存
-		var msg Message
+		var msg model.Message
 		_ = rows.Scan(
 			&msg.ID,
 			&msg.ConversationID,
@@ -38,8 +39,8 @@ func GetMessagesByConversationID(ctx context.Context, cid string) ([]*schema.Mes
 	return res, nil
 }
 
-func GetConversationByUid(ctx context.Context, uid string) ([]*Conversation, error) {
-	var res []*Conversation
+func GetConversationByUid(ctx context.Context, uid string) ([]*model.Conversation, error) {
+	var res []*model.Conversation
 
 	sql := `SELECT * FROM conversations WHERE user_id = $1 ORDER BY created_at DESC`
 	rows, err := g.PgConn.Query(ctx, sql, uid)
@@ -48,7 +49,7 @@ func GetConversationByUid(ctx context.Context, uid string) ([]*Conversation, err
 	}
 	for rows.Next() {
 		// 声明值类型，分配内存
-		var conv Conversation
+		var conv model.Conversation
 		_ = rows.Scan(
 			&conv.ID,
 			&conv.UserID,
@@ -80,7 +81,7 @@ func AddMessage(ctx context.Context, cid string, role string, content string) er
 	return nil
 }
 
-func AddConversation(ctx context.Context, uid string, title string) (*Conversation, error) {
+func AddConversation(ctx context.Context, uid string, title string) (*model.Conversation, error) {
 	sql := `INSERT INTO conversations (user_id, title, created_at, updated_at) VALUES ($1, $2, NOW(), NOW()) RETURNING id`
 	var id string
 	err := g.PgConn.QueryRow(ctx, sql, uid, title).Scan(&id)
@@ -93,7 +94,7 @@ func AddConversation(ctx context.Context, uid string, title string) (*Conversati
 		return nil, fmt.Errorf("parse conversation ID failed: %w", err)
 	}
 
-	return &Conversation{
+	return &model.Conversation{
 		ID:     cid,
 		UserID: uid,
 		Title:  title,

@@ -9,13 +9,13 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/erasernoob/JARVIS/beans"
+	"github.com/erasernoob/JARVIS/model"
 )
 
 // 配置文件filepath
 var (
 	filepath string
-	config   *beans.Config
+	config   *model.Config
 	once     sync.Once
 )
 
@@ -29,15 +29,15 @@ func CheckTheWd() {
 	fmt.Println(cur)
 }
 
-func ReadPgDbConfig() (*beans.PgDbConfig, error) {
+func ReadPgDbConfig() (*model.PgDbConfig, error) {
 	return GetConfig().PostgresDbConfig, nil
 }
 
-func GetConfig() *beans.Config {
+func GetConfig() *model.Config {
 	once.Do(func() {
 		var err error
-		config = &beans.Config{
-			PostgresDbConfig: new(beans.PgDbConfig),
+		config = &model.Config{
+			PostgresDbConfig: new(model.PgDbConfig),
 		}
 		if err = ReadJsonConfigFile(filepath); err != nil {
 			log.Fatalf("Failed to read config file: %v", err)

@@ -1,4 +1,4 @@
-package memory
+package model
 
 import (
 	"encoding/json"
