@@ -3,42 +3,58 @@ package config
 import (
 	"encoding/json"
 	"flag"
+	"fmt"
 	"log"
 	"os"
+	"strings"
 	"sync"
+
+	"github.com/erasernoob/JARVIS/src/beans"
 )
 
 // 配置文件filepath
 var (
 	filepath string
-	config   *Config
+	config   *beans.Config
 	once     sync.Once
 )
 
-func ReadPgDbConfig() (*PgDbConfig, error) {
+// 切换工作目录到项目的根路径
+func CheckTheWd() {
+	cur, _ := os.Getwd()
+	for strings.Contains(cur, "src") {
+		_ = os.Chdir("..")
+		cur, _ = os.Getwd()
+	}
+	fmt.Println(cur)
+}
+
+func ReadPgDbConfig() (*beans.PgDbConfig, error) {
 	return GetConfig().PostgresDbConfig, nil
 }
 
-func GetConfig() *Config {
+func GetConfig() *beans.Config {
 	once.Do(func() {
 		var err error
-		config = &Config{
-			PostgresDbConfig: new(PgDbConfig),
+		config = &beans.Config{
+			PostgresDbConfig: new(beans.PgDbConfig),
 		}
 		if err = ReadJsonConfigFile(filepath); err != nil {
 			log.Fatalf("Failed to read config file: %v", err)
-			os.Exit(1)
+			return
 		}
 	})
 	return config
 }
 
 func init() {
+	CheckTheWd()
+
 	flag.StringVar(&filepath, "config", "dev.json", "Path to the configuration file")
 
 	_ = GetConfig()
 
-	flag.Parse()
+	// flag.Parse()
 
 }
 
