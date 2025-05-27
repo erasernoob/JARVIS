@@ -8,13 +8,16 @@ import (
 	g "github.com/erasernoob/JARVIS/global"
 	"github.com/erasernoob/JARVIS/model"
 	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5"
 )
+
+var con *pgx.Conn = g.PgConn
 
 func GetMessagesByConversationID(ctx context.Context, cid string) ([]*schema.Message, error) {
 	var res []*schema.Message
 
 	sql := `SELECT * FROM messages WHERE conversation_id = $1 ORDER BY created_at DESC`
-	rows, err := g.PgConn.Query(ctx, sql, cid)
+	rows, err := con.Query(ctx, sql, cid)
 	if err != nil {
 		return nil, err
 	}
@@ -43,7 +46,7 @@ func GetConversationByUid(ctx context.Context, uid string) ([]*model.Conversatio
 	var res []*model.Conversation
 
 	sql := `SELECT * FROM conversations WHERE user_id = $1 ORDER BY created_at DESC`
-	rows, err := g.PgConn.Query(ctx, sql, uid)
+	rows, err := con.Query(ctx, sql, uid)
 	if err != nil {
 		return nil, err
 	}
@@ -65,7 +68,7 @@ func GetConversationByUid(ctx context.Context, uid string) ([]*model.Conversatio
 
 func AddMessage(ctx context.Context, cid string, role string, content string) error {
 	sql := `INSERT INTO messages (conversation_id, role, content, timestamp) VALUES ($1, $2, $3, NOW())`
-	t, err := g.PgConn.Begin(ctx)
+	t, err := con.Begin(ctx)
 	if err != nil {
 		return fmt.Errorf("begin transaction failed: %w", err)
 	}
@@ -84,7 +87,7 @@ func AddMessage(ctx context.Context, cid string, role string, content string) er
 func AddConversation(ctx context.Context, uid string, title string) (*model.Conversation, error) {
 	sql := `INSERT INTO conversations (user_id, title, created_at, updated_at) VALUES ($1, $2, NOW(), NOW()) RETURNING id`
 	var id string
-	err := g.PgConn.QueryRow(ctx, sql, uid, title).Scan(&id)
+	err := con.QueryRow(ctx, sql, uid, title).Scan(&id)
 	if err != nil {
 		return nil, fmt.Errorf("insert conversation failed: %w", err)
 	}

@@ -1,11 +1,11 @@
 package model
 
+// 只做结构定义
 import (
 	"context"
 
 	llm "github.com/cloudwego/eino/components/model"
 	"github.com/cloudwego/eino/schema"
-	// db "github.com/erasernoob/JARVIS/dao"
 )
 
 type Client struct {
