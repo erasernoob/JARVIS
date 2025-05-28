@@ -11,6 +11,14 @@ const (
 )
 
 const (
-	ASSISTANT = "assistant"
-	USER      = "user"
+	ASSISTANT  = "assistant"
+	USER       = "user"
+	REDIS_ADDR = "REDIS_ADDR"
+)
+
+const (
+	MODEL_NAME      = "MODEL_NAME"
+	API_KEY         = "DASHSCOPE_API_KEY"
+	BASE_URL        = "OPENAI_BASE_URL"
+	EMBEDDING_MODEL = "EMBEDDING_MODEL"
 )
