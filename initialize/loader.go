@@ -5,14 +5,13 @@ import (
 
 	"github.com/cloudwego/eino-ext/components/document/loader/file"
 	"github.com/cloudwego/eino/components/document"
-	"github.com/cloudwego/eino/components/document/parser"
 	"github.com/cloudwego/eino/schema"
 )
 
 func NewLocalFileLoader(ctx context.Context) (*file.FileLoader, error) {
 	loader, err := file.NewFileLoader(ctx, &file.FileLoaderConfig{
-		UseNameAsID: true,                // Whether to use the file name as the document ID
-		Parser:      &parser.ExtParser{}, // Optional: specify a custom parser
+		// UseNameAsID: true,                 // Whether to use the file name as the document ID
+		// Parser:      &parser.TextParser{}, // Optional: specify a custom parser
 	})
 	if err != nil {
 		return nil, err
