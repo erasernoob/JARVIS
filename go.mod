@@ -32,6 +32,8 @@ require (
 	github.com/cloudwego/base64x v0.1.5 // indirect
 	github.com/cloudwego/eino-examples/quickstart/eino_assistant v0.0.0-20250425101021-cf6cb2dccc65
 	github.com/cloudwego/eino-ext/components/document/transformer/splitter/markdown v0.0.0-20250527025003-c8588b6dc7a9
+	github.com/cloudwego/eino-ext/components/document/transformer/splitter/recursive v0.0.0-20250527025003-c8588b6dc7a9
+	github.com/cloudwego/eino-ext/components/document/transformer/splitter/semantic v0.0.0-20250527025003-c8588b6dc7a9
 	github.com/cloudwego/eino-ext/components/embedding/openai v0.0.0-20250527025003-c8588b6dc7a9
 	github.com/cloudwego/eino-ext/components/indexer/redis v0.0.0-20250527025003-c8588b6dc7a9
 	github.com/cloudwego/eino-ext/components/model/openai v0.0.0-20250526061219-600837d0bdf3
