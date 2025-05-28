@@ -1,4 +1,4 @@
-package knowledge_index
+package knowledgeindexing
 
 import (
 	"context"
@@ -32,7 +32,7 @@ func BuildKnowledgeIndexing(ctx context.Context) (r compose.Runnable[document.So
 	if err != nil {
 		return nil, err
 	}
-	- = g.AddDocumentTransformerNode(MarkdownHeaderSplitter, mdHeaderSplitter)
+	_ = g.AddDocumentTransformerNode(MarkdownHeaderSplitter, mdHeaderSplitter)
 
 	// 4. create a new indexer
 	redisIndexer, err := initialize.NewRedisIndexer(ctx)
