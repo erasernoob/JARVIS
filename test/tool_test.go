@@ -21,7 +21,7 @@ func Test_tool(t *testing.T) {
 	ctx := context.Background()
 
 	// 1. Initialize tools
-	searchTool := mt.GetDuckDuckGoSearchTool(context.Background())
+	searchTool := mt.GetDuckDuckGoSearchTool(ctx)
 	todoTools := []tool.BaseTool{
 		// getAddTodoTool(), // NewTool construction
 		// updateTool,       // InferTool construction

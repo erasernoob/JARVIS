@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"runtime/debug"
 	"testing"
 
 	"github.com/cloudwego/eino/components/document"
@@ -16,11 +17,12 @@ func TestIndexing(t *testing.T) {
 
 	runner, err := knowledgeindexing.BuildKnowledgeIndexing(ctx)
 	if err != nil {
+		debug.Stack()
 		fmt.Println(err)
 		os.Exit(1)
 	}
 	res, err := runner.Invoke(ctx, document.Source{
-		URI: "./README.md",
+		URI: "./files/abstract-factory.md",
 	})
 	if err != nil {
 		fmt.Println(err)

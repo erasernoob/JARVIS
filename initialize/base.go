@@ -5,6 +5,7 @@ import (
 
 	"github.com/erasernoob/JARVIS/config"
 	"github.com/erasernoob/JARVIS/global"
+	"github.com/erasernoob/JARVIS/initialize/db"
 )
 
 func Init(ctx context.Context) error {
@@ -16,7 +17,7 @@ func Init(ctx context.Context) error {
 	}
 
 	// Initialize PostgreSQL database connection
-	_, err = InitPostgresDB(ctx, pgConfig)
+	_, err = db.InitPostgresDB(ctx, pgConfig)
 	if err != nil {
 		// log.Fatalf("Failed to initialize PostgreSQL database: %v", err)
 		return err

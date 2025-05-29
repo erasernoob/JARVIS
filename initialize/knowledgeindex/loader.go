@@ -1,4 +1,4 @@
-package initialize
+package knowledgeindex
 
 import (
 	"context"

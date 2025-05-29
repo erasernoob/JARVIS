@@ -1,4 +1,4 @@
-package initialize
+package knowledgeindex
 
 import (
 	"context"
@@ -35,10 +35,11 @@ func NewSemanticTransformer(ctx context.Context) (tsf document.Transformer, err 
 	config := &semantic.Config{
 		Embedding:    embedder,                      // 必需：用于生成文本向量的嵌入器
 		BufferSize:   2,                             // 可选：上下文缓冲区大小
-		MinChunkSize: 100,                           // 可选：最小片段大小
+		MinChunkSize: 10,                            // 可选：最小片段大小
 		Separators:   []string{"\n", ".", "?", "!"}, // 可选：分隔符列表
 		Percentile:   0.9,                           // 可选：分割阈值百分位数
 		LenFunc:      nil,                           // 可选：自定义长度计算函数
+
 	}
 
 	tsf, err = semantic.NewSplitter(ctx, config)

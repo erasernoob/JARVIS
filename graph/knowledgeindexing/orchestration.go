@@ -5,7 +5,7 @@ import (
 
 	"github.com/cloudwego/eino/components/document"
 	"github.com/cloudwego/eino/compose"
-	"github.com/erasernoob/JARVIS/initialize"
+	indexInit "github.com/erasernoob/JARVIS/initialize/knowledgeindex"
 )
 
 const (
@@ -21,21 +21,21 @@ func BuildKnowledgeIndexing(ctx context.Context) (r compose.Runnable[document.So
 	g := compose.NewGraph[document.Source, []string]()
 
 	// 2. create a new file loader
-	loader, err := initialize.NewLocalFileLoader(ctx)
+	loader, err := indexInit.NewLocalFileLoader(ctx)
 	if err != nil {
 		return nil, err
 	}
 	_ = g.AddLoaderNode(FileLoader, loader)
 
 	// 3. create a new transformer(splitter)
-	mdHeaderSplitter, err := initialize.NewMdHeaderTransformer(ctx)
+	mdHeaderSplitter, err := indexInit.NewRecursiveTransformer(ctx)
 	if err != nil {
 		return nil, err
 	}
 	_ = g.AddDocumentTransformerNode(MarkdownHeaderSplitter, mdHeaderSplitter)
 
 	// 4. create a new indexer
-	redisIndexer, err := initialize.NewRedisIndexer(ctx)
+	redisIndexer, err := indexInit.NewRedisIndexer(ctx)
 	if err != nil {
 		return nil, err
 	}

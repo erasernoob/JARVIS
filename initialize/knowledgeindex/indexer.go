@@ -1,4 +1,4 @@
-package initialize
+package knowledgeindex
 
 import (
 	"context"
@@ -7,6 +7,7 @@ import (
 
 	// "github.com/cloudwego/eino-examples/quickstart/eino_assistant/pkg/redis"
 	"github.com/cloudwego/eino-ext/components/indexer/redis"
+	"github.com/erasernoob/JARVIS/initialize/db"
 	"github.com/google/uuid"
 
 	"github.com/cloudwego/eino/components/indexer"
@@ -27,7 +28,7 @@ const (
 // Use the redis as the vector store(但其实感觉更像是存储分块完之后的文本的地方)
 // indexer 包括了embedding模型
 func NewRedisIndexer(ctx context.Context) (idr indexer.Indexer, err error) {
-	redisCli := NewRedisClient(ctx)
+	redisCli := db.NewRedisClient(ctx)
 
 	// start the build the redis.config
 
