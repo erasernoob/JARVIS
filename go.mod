@@ -5,6 +5,7 @@ go 1.24.3
 require (
 	github.com/cloudwego/eino v0.3.37
 	github.com/cloudwego/eino-ext/components/document/loader/file v0.0.0-20250527025003-c8588b6dc7a9
+	github.com/cloudwego/eino-ext/components/retriever/redis v0.0.0-20250225083118-fd27d80f189c
 	github.com/joho/godotenv v1.5.1
 )
 
@@ -21,7 +22,6 @@ require (
 	github.com/mattn/go-colorable v0.1.14 // indirect
 	github.com/meguminnnnnnnnn/go-openai v0.0.0-20250523041550-e202cd57070c // indirect
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
-	github.com/rogpeppe/go-internal v1.14.1 // indirect
 	golang.org/x/crypto v0.38.0 // indirect
 	golang.org/x/text v0.25.0 // indirect
 )
@@ -30,7 +30,6 @@ require (
 	github.com/bytedance/sonic v1.13.2 // indirect
 	github.com/bytedance/sonic/loader v0.2.4 // indirect
 	github.com/cloudwego/base64x v0.1.5 // indirect
-	github.com/cloudwego/eino-examples/quickstart/eino_assistant v0.0.0-20250425101021-cf6cb2dccc65
 	github.com/cloudwego/eino-ext/components/document/transformer/splitter/markdown v0.0.0-20250527025003-c8588b6dc7a9
 	github.com/cloudwego/eino-ext/components/document/transformer/splitter/recursive v0.0.0-20250527025003-c8588b6dc7a9
 	github.com/cloudwego/eino-ext/components/document/transformer/splitter/semantic v0.0.0-20250527025003-c8588b6dc7a9

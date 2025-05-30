@@ -36,6 +36,7 @@ func NewRedisIndexer(ctx context.Context) (idr indexer.Indexer, err error) {
 		Client:    &redisCli,
 		KeyPrefix: RedisPrefix,
 		BatchSize: 1,
+		// 将文件转变成`hash`数据结构
 		DocumentToHashes: func(ctx context.Context, doc *schema.Document) (*redis.Hashes, error) {
 			if doc.ID == "" {
 				doc.ID = uuid.New().String()
