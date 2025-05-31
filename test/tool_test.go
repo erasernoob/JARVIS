@@ -3,82 +3,116 @@ package test
 import (
 	"context"
 	"fmt"
-	"log"
 	"testing"
 
 	"github.com/cloudwego/eino/components/tool"
 	"github.com/cloudwego/eino/compose"
+	"github.com/cloudwego/eino/flow/agent/react"
 	"github.com/cloudwego/eino/schema"
-
 	"github.com/erasernoob/JARVIS/global"
-	mt "github.com/erasernoob/JARVIS/tool"
+	"github.com/erasernoob/JARVIS/graph/tools/open"
 )
 
-func Test_tool(t *testing.T) {
+func TestTool(t *testing.T) {
 	InitTestEnv()
-	fmt.Println(123)
-
 	ctx := context.Background()
 
-	// 1. Initialize tools
-	searchTool := mt.GetDuckDuckGoSearchTool(context.Background())
-	todoTools := []tool.BaseTool{
-		// getAddTodoTool(), // NewTool construction
-		// updateTool,       // InferTool construction
-		// &ListTodoTool{},  // Implements Tool interface
-		searchTool, // Officially packaged tool
-	}
-
-	chatModel := global.Agent.LLM
-
-	// 2. Get tool information and bind to ChatModel
-	toolInfos := make([]*schema.ToolInfo, 0, len(todoTools))
-	for _, tool := range todoTools {
-		info, err := tool.Info(ctx)
-		if err != nil {
-			log.Fatal(err)
-		}
-		toolInfos = append(toolInfos, info)
-	}
-	var err error
-	chatModel, err = chatModel.WithTools(toolInfos)
+	opentool, err := open.NewOpenFileTool(ctx, nil)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
+		return
 	}
-
-	// 3.Create tools node
-	todoToolsNode, err := compose.NewToolNode(context.Background(), &compose.ToolsNodeConfig{
-		Tools: todoTools,
-	})
+	openInfo, err := opentool.Info(ctx)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
+	}
+	LLM, err := global.Agent.LLM.WithTools([]*schema.ToolInfo{openInfo})
+	if err != nil {
+		fmt.Println(err)
 	}
 
-	// 4. Build the complete processing chain
+	toolArray := []tool.BaseTool{
+		opentool,
+	}
+
+	// start to create a chain
+	global.Agent.LLM = LLM
+	// content, err := service.SendUserMessage(ctx, global.Agent, "Help me to open the file in my 'D' disk named mapreduce.pdf")
+	// if err != nil {
+	// 	fmt.Println(err)
+	// }
 	chain := compose.NewChain[[]*schema.Message, []*schema.Message]()
-	chain.
-		AppendChatModel(chatModel, compose.WithNodeName("chat_model")).
-		AppendToolsNode(todoToolsNode, compose.WithNodeName("tools"))
 
-	// Compile and run the chain
-	agent, err := chain.Compile(ctx)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	// Run example
-	resp, err := agent.Invoke(ctx, []*schema.Message{
-		{
-			Role:    schema.User,
-			Content: "Add a TODO for learning Eino and search for the repository address of cloudwego/eino",
-		},
+	toolNode, err := compose.NewToolNode(ctx, &compose.ToolsNodeConfig{
+		Tools: toolArray,
 	})
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 	}
 
-	// Output the result
-	for _, msg := range resp {
+	chain.AppendChatModel(global.Agent.LLM)
+	chain.AppendToolsNode(toolNode)
+	chain.AppendChatModel(global.Agent.LLM)
+
+	c, err := chain.Compile(ctx)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	res, err := c.Invoke(ctx, []*schema.Message{
+		schema.SystemMessage("You are a very helpful agent"),
+		schema.UserMessage("Help me to open the file in my 'D' disk named mapreduce.pdf"),
+	})
+
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	for _, msg := range res {
 		fmt.Println(msg.Content)
 	}
+}
+
+func TestToolUseRecAgent(t *testing.T) {
+	InitTestEnv()
+	ctx := context.Background()
+
+	opentool, err := open.NewOpenFileTool(ctx, nil)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	openInfo, err := opentool.Info(ctx)
+	if err != nil {
+		fmt.Println(err)
+	}
+	LLM, err := global.Agent.LLM.WithTools([]*schema.ToolInfo{openInfo})
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	toolArray := []tool.BaseTool{
+		opentool,
+	}
+
+	agent, err := react.NewAgent(ctx, &react.AgentConfig{
+		ToolCallingModel: LLM,
+		ToolsConfig: compose.ToolsNodeConfig{
+			Tools: toolArray,
+		},
+	})
+
+	res, err := agent.Generate(ctx, []*schema.Message{
+		schema.SystemMessage("You are a very helpful agent"),
+		schema.UserMessage("help me open the 'd:/documents/mapreduce.pdf' file give all of your tools call information make me debug easily"),
+	})
+
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	fmt.Println(res.Content)
+
 }

@@ -7,7 +7,7 @@ import (
 )
 
 func GetCurUserID() string {
-	return "124"
+	return "testtt"
 }
 
 func Identify(ctx context.Context) context.Context {
