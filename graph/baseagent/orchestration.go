@@ -7,9 +7,16 @@ import (
 	"github.com/cloudwego/eino/compose"
 	"github.com/cloudwego/eino/flow/agent/react"
 	"github.com/erasernoob/JARVIS/global"
+	mt "github.com/erasernoob/JARVIS/graph/tools/open"
 )
 
 func GetTools(ctx context.Context) (tools []tool.BaseTool, err error) {
+	tools = make([]tool.BaseTool, 0)
+	tool, err := mt.NewOpenFileTool(ctx, nil)
+	if err != nil {
+		return nil, err
+	}
+	tools = append(tools, tool)
 	return tools, err
 }
 
@@ -17,7 +24,7 @@ func GetTools(ctx context.Context) (tools []tool.BaseTool, err error) {
 func BuildBaseAgent(ctx context.Context) (lba *compose.Lambda, err error) {
 	config := react.AgentConfig{
 		MaxStep:          25,
-		ToolCallingModel: global.LLM,
+		ToolCallingModel: global.Agent.LLM,
 		// add or remove the prompt msg during the message transport
 		// MessageModifier: ,
 		ToolReturnDirectly: map[string]struct{}{},
