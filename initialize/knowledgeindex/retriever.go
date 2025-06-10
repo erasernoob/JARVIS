@@ -18,7 +18,7 @@ func NewRedisRetriever(ctx context.Context) (rtr retriever.Retriever, err error)
 
 	config := &redis.RetrieverConfig{
 		Client:            &redisCli,
-		Index:             fmt.Sprint(RedisPrefix, IndexName),
+		Index:             fmt.Sprintf("%s%s", RedisPrefix, IndexName),
 		VectorField:       VectorField,
 		DistanceThreshold: new(float64),
 		Dialect:           2,

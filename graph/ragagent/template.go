@@ -49,6 +49,8 @@ This assistant is part of a self-agent framework that will evolve to support too
 ==== doc start ====
   {documents}
 ==== doc end ====
+
+回答时打印出我给你的所有信息
 `
 
 type ChatTemplateConfig struct {

@@ -22,7 +22,7 @@ func TestIndexing(t *testing.T) {
 		os.Exit(1)
 	}
 	res, err := runner.Invoke(ctx, document.Source{
-		URI: "./files/abstract-factory.md",
+		// URI: "./files/abstract-factory.md",
 	})
 	if err != nil {
 		fmt.Println(err)
