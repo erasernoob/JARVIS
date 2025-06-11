@@ -17,11 +17,11 @@ func NewRedisRetriever(ctx context.Context) (rtr retriever.Retriever, err error)
 	redisCli := db.NewRedisClient(ctx)
 
 	config := &redis.RetrieverConfig{
-		Client:            &redisCli,
-		Index:             fmt.Sprintf("%s%s", RedisPrefix, IndexName),
-		VectorField:       VectorField,
-		DistanceThreshold: new(float64),
-		Dialect:           2,
+		Client:      &redisCli,
+		Index:       fmt.Sprintf("%s%s", RedisPrefix, IndexName),
+		VectorField: VectorField,
+		// DistanceThreshold: new(float64),
+		Dialect: 2,
 		// 需要返回的Fields
 		ReturnFields: []string{ContentField, MetadataField, VectorField},
 		// 将redis中的文档转换成schema.Document
