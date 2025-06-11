@@ -6,6 +6,7 @@
     "configurations": [
         {
             "name": "Launch main",
+            "console": "integratedTerminal",
             "type": "go",
             "request": "launch",
             "mode": "debug",

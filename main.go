@@ -1,9 +1,13 @@
 package main
 
 import (
+	"bufio"
 	"context"
+	"fmt"
 	"log"
+	"os"
 	"runtime/debug"
+	"strings"
 
 	"github.com/erasernoob/JARVIS/auth"
 	g "github.com/erasernoob/JARVIS/global"
@@ -35,10 +39,28 @@ func main() {
 	// fmt.Println(content)
 	// content, _ = service.SendUserMessage(ctx, agent, "what's my name? and tell me my chat history use markdown")
 	// fmt.Println(content)
+	RunRagAgentDialog("1")
+}
 
-	reader, err := ragagent.RunTheRagAgent(ctx, "1234", "what's my name? and tell me my chat history use markdown")
-	if err != nil {
-		log.Fatalf("run rag agent failed: %s", err)
+func RunRagAgentDialog(uid string) {
+	reader := bufio.NewReader(os.Stdin)
+	for {
+		fmt.Print("🧑‍: ")
+		input, err := reader.ReadString('\n')
+		if err != nil {
+			fmt.Println("Error reading input:", err)
+			continue
+		}
+		in := strings.TrimSpace(input)
+		if in == "exit" || in == "quit" || in == " " {
+			return
+		}
+
+		sr, err := ragagent.RunTheRagAgent(context.Background(), uid, input)
+		if err != nil {
+			fmt.Printf("Error running RAG agent: %s\n", err)
+			continue
+		}
+		utils.StreamPrint(sr)
 	}
-	utils.StreamPrint(reader)
 }

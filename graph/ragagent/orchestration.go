@@ -2,7 +2,9 @@ package ragagent
 
 import (
 	"context"
+	"errors"
 	"fmt"
+	"io"
 
 	"github.com/cloudwego/eino/compose"
 	"github.com/cloudwego/eino/schema"
@@ -116,10 +118,55 @@ func RunTheRagAgent(ctx context.Context, uid string, msg string) (output *schema
 		return nil, err
 	}
 
-	err = MemMgr.AppendMessage(ctx, schema.User, msg)
+	srs := output.Copy(2)
+
+	// Save the Assistant's response to the memory
+	go SaveStreamResponse(ctx, srs[1])
+
+	err = MemMgr.AppendMessage(ctx, schema.Assistant, msg)
 	if err != nil {
 		return nil, err
 	}
 
 	return output, nil
+}
+
+func SaveStreamResponse(ctx context.Context, output *schema.StreamReader[*schema.Message]) {
+	// for save to memory
+	fullMsgs := make([]*schema.Message, 0)
+
+	defer func() {
+		// close stream if you used it
+		output.Close()
+
+		// add user input to history
+		fullMsg, err := schema.ConcatMessages(fullMsgs)
+		if err != nil {
+			fmt.Println("error concatenating messages: ", err.Error())
+		}
+		// add agent response to history
+		if err := MemMgr.AppendMessage(ctx, schema.Assistant, fullMsg.Content); err != nil {
+			log.Errorf(ctx, "error appending message to memory: %v\n", err.Error())
+			return
+		}
+
+	}()
+
+outer:
+	for {
+		select {
+		case <-ctx.Done():
+			fmt.Println("context done", ctx.Err())
+			return
+		default:
+			chunk, err := output.Recv()
+			if err != nil {
+				if errors.Is(err, io.EOF) {
+					break outer
+				}
+			}
+
+			fullMsgs = append(fullMsgs, chunk)
+		}
+	}
 }
