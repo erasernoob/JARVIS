@@ -7,7 +7,9 @@ import (
 	"github.com/cloudwego/eino/compose"
 	"github.com/cloudwego/eino/schema"
 	"github.com/erasernoob/JARVIS/graph/baseagent"
+	"github.com/erasernoob/JARVIS/graph/ragagent/mem"
 	"github.com/erasernoob/JARVIS/initialize/knowledgeindex"
+	"google.golang.org/appengine/log"
 )
 
 func BuildRagAgent(ctx context.Context) (r compose.Runnable[*UserMessage, *schema.Message], err error) {
@@ -75,20 +77,46 @@ func BuildRagAgent(ctx context.Context) (r compose.Runnable[*UserMessage, *schem
 	return
 }
 
-func RunTheRagAgent(ctx context.Context, msg string) (output *schema.StreamReader[*schema.Message], err error) {
+var MemMgr mem.Memory
+
+func Init(uid string) {
+	// Initialize the memory manager
+	var err error
+	MemMgr, err = mem.NewMemoryMgr(uid)
+	if err != nil {
+		log.Errorf(context.Background(), "failed to initialize memory manager: %v", err)
+		return
+	}
+}
+
+func RunTheRagAgent(ctx context.Context, uid string, msg string) (output *schema.StreamReader[*schema.Message], err error) {
+	Init(uid)
+
 	// 1. build the rag agent
 	ragAgent, err := BuildRagAgent(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("failed to build rag agent: %w", err)
 	}
+	// Get the history from the database
+	history, err := MemMgr.GetHistory()
+	if err != nil {
+		return nil, fmt.Errorf("failed to get history: %w", err)
+	}
 
 	// 2. create the input message
 	input := &UserMessage{
-		Query: msg,
+		ID:      uid,
+		Query:   msg,
+		History: history,
 	}
 
 	// 3. run the rag agent
 	output, err = ragAgent.Stream(ctx, input)
+	if err != nil {
+		return nil, err
+	}
+
+	err = MemMgr.AppendMessage(ctx, schema.User, msg)
 	if err != nil {
 		return nil, err
 	}

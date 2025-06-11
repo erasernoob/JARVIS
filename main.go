@@ -36,7 +36,7 @@ func main() {
 	// content, _ = service.SendUserMessage(ctx, agent, "what's my name? and tell me my chat history use markdown")
 	// fmt.Println(content)
 
-	reader, err := ragagent.RunTheRagAgent(ctx, "给我讲讲方法工厂模式，打印出历史消息")
+	reader, err := ragagent.RunTheRagAgent(ctx, "1234", "what's my name? and tell me my chat history use markdown")
 	if err != nil {
 		log.Fatalf("run rag agent failed: %s", err)
 	}
